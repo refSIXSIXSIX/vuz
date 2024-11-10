@@ -52,6 +52,19 @@ class Passenger:
 
     def __str__(self):
         return f"Пассажир {self.passenger_id}: Имя - {self.name}, Возраст - {self.age}"
+ 
+class Ticket:
+    def __init__(self,ticket_id):
+        self.ticket_id = ticket_id
+
+    def update_ticketid(self,ticket_id=None):
+        self.ticket_id = ticket_id
+    def read_ticket(self):
+        info = (
+            f"Номер билета: {self.ticket_id}\n"
+        )
+        print(info)
+        return info
 
 
 class ShowInterface:
@@ -83,17 +96,26 @@ class ShowInterface:
         print("\nИспользуем __str__ метод:")
         print(passenger)
 
+    def check_ticket_id(self):
+        print("\nПроверка работы класса Ticket:")
+        ticket = Ticket(123456)
+        ticket.read_ticket()
+
+        print("\nОбновляем билет")
+        ticket.update_ticketid(ticket_id=133712)
+        ticket.read_ticket()
+
+
     def run(self):
         while True:
             print("\nМеню:")
             print("1. Проверить работу класса Bus")
             print("2. Проверить работу класса Passenger")
-            print("3. Выход")
+            print("3. Проверить работу класса Ticket")
 
             try:
-                choice = input("Выберите действие (1-3): ")
+                choice = input("Выберите действие (1-4): ")
 
-                # Проверка, что choice является числом
                 choice = int(choice)
 
                 if choice == 1:
@@ -101,16 +123,17 @@ class ShowInterface:
                 elif choice == 2:
                     self.check_passenger_class()
                 elif choice == 3:
+                    self.check_ticket_id()
+                elif choice == 4:
                     print("Выход из программы...")
                     break
                 else:
                     print("Неверный выбор! Пожалуйста, выберите действие от 1 до 3.")
             except ValueError:
-                print("Ошибка! Пожалуйста, введите число от 1 до 3.")
+                print("Ошибка! Пожалуйста, введите число от 1 до 4.")
             except Exception as e:
                 print(f"Произошла непредвиденная ошибка: {e}")
 
 
-# Запуск интерфейса
 interface = ShowInterface()
 interface.run()
