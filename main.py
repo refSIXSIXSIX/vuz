@@ -59,12 +59,56 @@ class Ticket:
 
     def update_ticketid(self,ticket_id=None):
         self.ticket_id = ticket_id
+
     def read_ticket(self):
         info = (
             f"Номер билета: {self.ticket_id}\n"
         )
         print(info)
         return info
+
+    def ticket_to_bus(self, bus_id):
+        return str(self.ticket_id)[:2] == str(bus_id)[:2]
+
+class Route:
+    def __init__(self,route_id):
+        self.route_id = route_id
+    
+    def update_routeid(self,route_id=None):
+        self.route_id = route_id
+
+    def read_route(self):
+        info = (
+            f"Номер маршрута: {self.route_id}\n"
+        )
+        print(info)
+        return info
+
+    def route_to_bus(self, bus_id):
+        return str(self.route_id)[:2] == str(bus_id)[:2]
+
+class Payment:
+    def __init__(self,pay_way,amount):
+        self.pay_way = pay_way
+        self.amount = amount
+
+    def update_payway(self,pay_way=None):
+        self.pay_way = pay_way
+    
+    def update_amount(self,amount=None):
+        self.amount = amount
+
+    def read_payment(self):
+        info = (
+            f"Способ оплаты: {self.pay_way}\n"
+            f"Сумма оплаты: {self.amount}\n"
+        )
+        print(info)
+        return info
+    
+
+
+
 
 
 class ShowInterface:
@@ -102,9 +146,42 @@ class ShowInterface:
         ticket.read_ticket()
 
         print("\nОбновляем билет")
+
         ticket.update_ticketid(ticket_id=133712)
         ticket.read_ticket()
+        if(ticket.ticket_to_bus(133)):
+            print("Hell yea")
+        else:
+            print("Oops")
 
+    def check_route_id(self):
+        print("\nПроверка работы класса Route:")
+        route = Route(1212444)
+        route.read_route()
+
+        print("\nОбновляем маршрут")
+
+        route.update_routeid(route_id=1919334)
+        route.read_route()
+        if(route.route_to_bus(191)):
+            print("Hell yea")
+        else:
+            print("Oops")
+
+    def check_payment(self):
+        print("\n Проверка работы класса Payment")
+        payment = Payment("Sberbank",1362)
+        payment.read_payment()
+
+        print("\n Обновляем данные по платежу")
+
+        payment.update_amount(8579)
+        payment.update_payway("T-Bank")
+        payment.read_payment()
+        if(payment.amount>=1000):
+            print("Hell yea")
+        else:
+            print("Oops")
 
     def run(self):
         while True:
@@ -112,9 +189,12 @@ class ShowInterface:
             print("1. Проверить работу класса Bus")
             print("2. Проверить работу класса Passenger")
             print("3. Проверить работу класса Ticket")
+            print("4. Проверить работу класса route")
+            print("5. Проверить работу класса Payment")
+            print("6. Завершить программу")
 
             try:
-                choice = input("Выберите действие (1-4): ")
+                choice = input("Выберите действие (1-6): ")
 
                 choice = int(choice)
 
@@ -125,12 +205,16 @@ class ShowInterface:
                 elif choice == 3:
                     self.check_ticket_id()
                 elif choice == 4:
-                    print("Выход из программы...")
+                    self.check_route_id()
+                elif choice == 5:
+                    self.check_payment()
+                elif choice == 6:
+                    print("Программа завершена")
                     break
                 else:
-                    print("Неверный выбор! Пожалуйста, выберите действие от 1 до 3.")
+                    print("Неверный выбор! Пожалуйста, выберите действие от 1 до 6.")
             except ValueError:
-                print("Ошибка! Пожалуйста, введите число от 1 до 4.")
+                print("Ошибка! Пожалуйста, введите число от 1 до 6.")
             except Exception as e:
                 print(f"Произошла непредвиденная ошибка: {e}")
 
