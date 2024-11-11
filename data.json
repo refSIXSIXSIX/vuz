@@ -1,0 +1,22 @@
+{
+    "bus": {
+        "bus_id": 1,
+        "bus_number": "A123",
+        "capacity": 50
+    },
+    "passenger": {
+        "passenger_id": 101,
+        "name": "Иван Иванов",
+        "age": 30
+    },
+    "ticket": {
+        "ticket_id": 123456
+    },
+    "route": {
+        "route_id": 1212444
+    },
+    "payment": {
+        "pay_way": "Sberbank",
+        "amount": 1362
+    }
+}

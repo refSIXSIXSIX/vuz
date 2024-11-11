@@ -1,4 +1,6 @@
-class Bus:
+import json
+
+class Bus: #Класс про автобус. Соблюдал CRU(d), добавил R в строку
     def __init__(self, bus_id, bus_number, capacity):
         self.bus_id = bus_id
         self.bus_number = bus_number
@@ -26,7 +28,7 @@ class Bus:
         return f"Автобус {self.bus_id}: Номер - {self.bus_number}, Вместимость - {self.capacity}"
 
 
-class Passenger:
+class Passenger:#Класс про пассажира. Соблюдал CRU(d), добавил R в строку
     def __init__(self, passenger_id, name, age):
         self.passenger_id = passenger_id
         self.name = name
@@ -53,7 +55,7 @@ class Passenger:
     def __str__(self):
         return f"Пассажир {self.passenger_id}: Имя - {self.name}, Возраст - {self.age}"
  
-class Ticket:
+class Ticket:#Микроласс про билет. Соблюдал CRU(d)
     def __init__(self,ticket_id):
         self.ticket_id = ticket_id
 
@@ -70,7 +72,7 @@ class Ticket:
     def ticket_to_bus(self, bus_id):
         return str(self.ticket_id)[:2] == str(bus_id)[:2]
 
-class Route:
+class Route:#Микроласс про маршрут. Соблюдал CRU(d)
     def __init__(self,route_id):
         self.route_id = route_id
     
@@ -87,7 +89,7 @@ class Route:
     def route_to_bus(self, bus_id):
         return str(self.route_id)[:2] == str(bus_id)[:2]
 
-class Payment:
+class Payment:#Микроласс про маршрут. Соблюдал CRU(d)
     def __init__(self,pay_way,amount):
         self.pay_way = pay_way
         self.amount = amount
@@ -111,7 +113,7 @@ class Payment:
 
 
 
-class ShowInterface:
+class ShowInterface:#Биг класс с интерфейсом и проверками класса, числа для проверки задаются вручную.
     def __init__(self):
         self.buses = {}
         self.passengers = {}
@@ -219,5 +221,43 @@ class ShowInterface:
                 print(f"Произошла непредвиденная ошибка: {e}")
 
 
-interface = ShowInterface()
+interface = ShowInterface()#Мейн <3
 interface.run()
+
+
+
+#JSON приколы import json(всё с 0)
+
+bus = Bus(1, "A123", 50)
+passenger = Passenger(101, "Иван Иванов", 30)
+ticket = Ticket(123456)
+route = Route(1212444)
+payment = Payment("Sberbank", 1362)
+
+data = {
+    "bus": {
+        "bus_id": bus.bus_id,
+        "bus_number": bus.bus_number,
+        "capacity": bus.capacity
+    },
+    "passenger": {
+        "passenger_id": passenger.passenger_id,
+        "name": passenger.name,
+        "age": passenger.age
+    },
+    "ticket": {
+        "ticket_id": ticket.ticket_id
+    },
+    "route": {
+        "route_id": route.route_id
+    },
+    "payment": {
+        "pay_way": payment.pay_way,
+        "amount": payment.amount
+    }
+}
+
+with open("data.json", "w", encoding="utf-8") as json_file:
+    json.dump(data, json_file, ensure_ascii=False, indent=4)
+
+print("Данные успешно сохранены в data.json")
