@@ -5,12 +5,27 @@ def is_valid_email(email):
     pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
     return bool(re.match(pattern, email))
 
+def read_emails_from_file(filename):
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            return [line.strip() for line in file]
+    except FileNotFoundError:
+        print(f"Файл {filename} не найден.")
+        return []
+
 def main():
-    email = input("Введите email: ")
-    if is_valid_email(email):
-        print("Email корректный.")
-    else:
-        print("Email некорректный.")
+    filename = input("Введите имя файла с email-адресами: ")
+    emails = read_emails_from_file(filename)
+    
+    if not emails:
+        print("Файл пустой или отсутствует.")
+        return
+    
+    for email in emails:
+        if is_valid_email(email):
+            print(f"{email} - корректный.")
+        else:
+            print(f"{email} - некорректный.")
 
 class TestEmailValidation(unittest.TestCase):
     def test_valid_emails(self):
@@ -22,8 +37,8 @@ class TestEmailValidation(unittest.TestCase):
         self.assertFalse(is_valid_email("lazzy.com"))
         self.assertFalse(is_valid_email("ulazzy@.com"))
         self.assertFalse(is_valid_email("lazzy@other"))
+
 def run_tests():
-    import unittest
     print("Запуск тестов...")
     unittest.main()
 
