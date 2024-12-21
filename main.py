@@ -1,56 +1,66 @@
-import re
-import unittest
+from tkinter import *
+from tkinter import messagebox
+from tkinter import filedialog
 
-def is_valid_email(email):
-    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-    return bool(re.match(pattern, email))
 
-def read_emails_from_file(filename):
-    try:
-        with open(filename, "r", encoding="utf-8") as file:
-            return [line.strip() for line in file]
-    except FileNotFoundError:
-        print(f"Файл {filename} не найден.")
-        return []
 
-def main():
-    filename = input("Введите имя файла с email-адресами: ")
-    emails = read_emails_from_file(filename)
-    
-    if not emails:
-        print("Файл пустой или отсутствует.")
-        return
-    
-    for email in emails:
-        if is_valid_email(email):
-            print(f"{email} - корректный.")
-        else:
-            print(f"{email} - некорректный.")
+def notepad_exit():
+    answer = messagebox.askokcancel('Выход', 'Вы точно хотите выйти?')
+    if answer:
+        root.destroy()
 
-class TestEmailValidation(unittest.TestCase):
-    def test_valid_emails(self):
-        self.assertTrue(is_valid_email("lazzy@test.com"))
-        self.assertTrue(is_valid_email("lazzy.2wice@example.vog.uk"))
-        self.assertTrue(is_valid_email("123@ass.org"))
+def open_file():
+    file_path = filedialog.askopenfilename(title='Выбор файла', filetypes=(('Текстовые документы (*.txt)', '*.txt'), ('Все файлы', '*.*')))
+    if file_path:
+        text_fild.delete('1.0', END)
+        text_fild.insert('1.0', open(file_path, encoding='utf-8').read())
 
-    def test_invalid_emails(self):
-        self.assertFalse(is_valid_email("lazzy.com"))
-        self.assertFalse(is_valid_email("ulazzy@.com"))
-        self.assertFalse(is_valid_email("lazzy@other"))
+def save_file():
+    file_path = filedialog.asksaveasfilename(filetypes=(('Текстовые документы (*.txt)', '*.txt'), ('Все файлы', '*.*')))
+    f = open(file_path, 'w', encoding='utf-8')
+    text = text_fild.get('1.0', END)
+    f.write(text)
+    f.close()
 
-def run_tests():
-    print("Запуск тестов...")
-    unittest.main()
+root = Tk()
+root.title('Текстовый редактор')
+root.geometry('600x700')
 
-if __name__ == "__main__":
-    print("What you need?\n")
-    print("1 - Main")
-    print("2 - Test")
-    choice = input()
+main_menu = Menu(root)
 
-    if choice == "1":
-        main()
-    elif choice == "2":
-        run_tests()
-    else:
-        print("Неверный выбор. Пожалуйста, выберите 1 или 2.")
+# Файл
+file_menu = Menu(main_menu, tearoff=0)
+file_menu.add_command(label='Открыть', command=open_file)
+file_menu.add_command(label='Сохранить', command=save_file)
+file_menu.add_separator()
+file_menu.add_command(label='Закрыть', command=notepad_exit)
+root.config(menu=file_menu)
+
+# Добавление списков меню
+main_menu.add_cascade(label='Файл', menu=file_menu)
+root.config(menu=main_menu)
+
+f_text = Frame(root)
+f_text.pack(fill=BOTH, expand=1)
+
+
+
+text_fild = Text(f_text,
+                 bg='black',
+                 fg='lime',
+                 padx=10,
+                 pady=10,
+                 wrap=WORD,
+                 insertbackground='brown',
+                 selectbackground='#8D917A',
+                 spacing3=10,
+                 width=30,
+                 font='Arial 14 bold'
+                 )
+text_fild.pack(expand=1, fill=BOTH, side=LEFT)
+
+scroll = Scrollbar(f_text, command=text_fild.yview)
+scroll.pack(side=LEFT, fill=Y)
+text_fild.config(yscrollcommand=scroll.set)
+
+root.mainloop()
